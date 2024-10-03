@@ -1,0 +1,156 @@
+package com.company;
+
+import java.util.ArrayList;
+
+/**
+ * This class represent a book
+ * This class contains properties such as title <I>(Represents title of the book)</I>, author<I>(contains author name)</I> and id.
+ *
+ */
+class Book {
+    public String title;
+    public String author;
+    public String id;
+
+    /**
+     *Constructor to create a book object
+     * @param title takes title of the book
+     * @param author takes author's name
+     * @param id takes id of the book
+     */
+    public Book(String title, String author, String id) {
+        this.title = title;
+        this.author = author;
+        this.id = id;
+    }
+}
+
+/**
+ * This class is used to implement an issued book
+ */
+class IssuedBook {
+    public String title;
+    public String author;
+    public String id;
+    public String owner;
+
+    /**
+     * Constructor to create an object of IssuedBook class
+     * @param obj takes a Book object
+     * @param owner takes name of user
+     */
+    public IssuedBook(Book obj, String owner) {
+        this.title = obj.title;
+        this.author = obj.author;
+        this.id = obj.id;
+        this.owner = owner;
+    }
+}
+
+/**
+ * Library class to implement methods such as issueBook, returnBook, addBook
+ * Contains properties such as availableList, issuedList, userlist
+ */
+class Library {
+    public ArrayList<Book> availableList = new ArrayList<>(10);
+    public ArrayList<IssuedBook> issuedList = new ArrayList<>(10);
+    public String[] userlist = {"Utpal", "Souvik", "Subhadip"};
+
+    /**
+     * This method is used to add a new book.
+     * @param title This parameter refers to the title of the book
+     * @param author This parameter refers to the author of the book
+     * @param id This parameter refers to the id of the book
+     */
+    public void addBook(String title, String author, String id) {
+        Book b = new Book(title, author, id);
+        availableList.add(b);
+    }
+
+    /**
+     * Method to issue a book to a user
+     * @param title Takes title of the book
+     * @param user Takes username
+     * @return Returns 1 if book is successfully issued, 2 if book is not available to issue and 3 if username is not registered
+     */
+    public int issueBook(String title, String user) {
+        for (String e : userlist) {
+            if (e.equalsIgnoreCase(user)) {
+                for (Book b : availableList) {
+                    if (b.title.equalsIgnoreCase(title)) {
+                        availableList.remove(b);
+                        IssuedBook ib = new IssuedBook(b, user);
+                        issuedList.add(ib);
+                        return 1; //Successfully issued
+                    }
+                }
+                return 2; //Failed, already issued or not present
+            }
+        }
+
+        return 3; //Not registered
+    }
+
+    /**
+     * Method to return a book
+     * @param user Takes username
+     * @param id Takes book id
+     * @return Returns 1 if book is successfully returned or else -1
+     */
+    public int returnBook(String user, String id) {
+        for (IssuedBook e : issuedList) {
+            if (e.id.equals(id) && e.owner.equalsIgnoreCase(user)) {
+                issuedList.remove(e);
+                Book b2 = new Book(e.title, e.author, e.id);
+                availableList.add(b2);
+                return 1;//Successfully Returned
+            }
+        }
+        return -1;//Couldn't return
+    }
+
+    /**
+     * Method to show list of available books
+     */
+    public void showAvailableBooks() {
+        for (Book e : availableList) {
+            System.out.println(e.title + " by " + e.author);
+        }
+    }
+}
+
+/**
+ * This class is to implement a Library management system
+ *@author Utpal Roy
+ * @version 0.1
+ * @since 2024
+ * @see <a href="#">Java Docs</a>
+ */
+public class CWH104_Excercise7_LibraryManagement {
+    /**
+     *
+     * @param args These are arguments supplied
+     */
+    public static void main(String[] args) {
+        Library lib = new Library();
+
+
+        Book b1 = new Book("Pather Panchali", "Bibhutibhusan Bandyopadhyay", "101");
+        Book b2 = new Book("C Programming", "Danish Richie", "202");
+        Book b3 = new Book("Romeo & Juliet", "Shakespeare", "301");
+        lib.availableList.add(b1);
+        lib.availableList.add(b2);
+        lib.availableList.add(b3);
+
+        lib.showAvailableBooks();
+        int a = lib.issueBook("Pather Panchali", "Utpal");
+        System.out.println(a);
+        lib.showAvailableBooks();
+        lib.addBook("Chokher Bali", "Rabindranath Tagore","102");
+        lib.showAvailableBooks();
+        System.out.println(lib.returnBook("utpal","202"));
+        lib.showAvailableBooks();
+
+
+    }
+}
