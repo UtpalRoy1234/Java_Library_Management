@@ -126,7 +126,7 @@ class Library {
  * @since 2024
  * @see <a href="#">Java Docs</a>
  */
-public class CWH104_Excercise7_LibraryManagement {
+public class LibraryManagement {
     /**
      *
      * @param args These are arguments supplied
